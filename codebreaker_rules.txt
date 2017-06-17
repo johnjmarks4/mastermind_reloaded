@@ -1,0 +1,13 @@
+OK, here are the rules for the codebreaker:
+
+The computer will randomly select a four color pattern like this: "Red, Green, Orange, Yellow". Your job is try to guess all four colors and the order they occur in. Each turn you'll get some feedback on how you are doing:
+
+1. If you guess the correct color but the wrong place, the word "white" will appear.
+
+2. If you guess both the color and the place correctly, the word "black" will appear.
+
+3. If you've gotten neither right, that place in the code will remain blank.
+
+Use the feeback to improve on your past guesses and gradually unravel the code. If you fail to guess the correct color pattern after 12 turns, you lose; but if you guess the correct colors and order you win!
+
+Now make your first guess! The colors you have are: red, green, blue, purple, orange, and yellow.

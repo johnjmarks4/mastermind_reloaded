@@ -1,0 +1,13 @@
+OK, here are the rules for the codemaker:
+
+Type a four color pattern below like this "Red, Green, Orange, Yellow". The computer will try to guess all four colors and the order they occur in. Each turn the computer will see feedback on how it is doing:
+
+1. If the computer guesses the correct color but the wrong place, the word "white" will appear.
+
+2. If the computer guesses both the color and the place correctly, the word "black" will appear.
+
+3. If the computer gets neither right, that place in the code will remain blank.
+
+With each turn, the computer will inch a little closer to the code. If the computer guesses correctly by the 12th turn, you lose; but if you stump the computer after 12 turns you win!
+
+Now choose your code! The colors you have are: red, green, blue, purple, orange, and yellow.

@@ -47,7 +47,7 @@ get '/submit' do
     @code = params['code']
     @message = "The computer will now try to guess your code!"
   else
-    @message = 'Your input could` not be understood. Please type either "codebreaker" or "codemaker".'
+    @message = 'Your input could not be understood. Please type either "codebreaker" or "codemaker".'
   end
 
   session['turn'] += 1

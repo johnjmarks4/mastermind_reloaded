@@ -8,23 +8,10 @@ configure do
   enable :sessions
 end
 
-puts "Welcome to Mastermind! What is your name?"
-player_name = gets.chomp
-puts "\nHello, #{player_name}! Would you like to play as codebreaker or codemaker?"
-
-my_game = Game.new("My game", player_name)
-
-until my_game.player.nil? == false
-  my_game.assign_role(gets.chomp.downcase)
-  if my_game.player.nil?
-    puts 'Your input could not be understood. Please type either "codebreaker" or "codemaker".'
-    puts "\n"
-  end
-end
+my_game = Game.new
 
 player = my_game.player
 computer = my_game.computer
-turns = 0
 
 if player.class == Codebreaker
   code = computer.randomly_make_code
@@ -107,6 +94,8 @@ if player.class == Codemaker
     end
 
   get '/' do
+    #session["turns"] = 0
+    #@session = session
     @display = " "
     @message = "Would you like to play as codebreaker or codemaker?"
     erb :index
@@ -129,7 +118,7 @@ if player.class == Codemaker
     elsif role == "rules" && session["role"] == "Codebreaker"
       @message = File.read("codebreaker_rules.txt")
     else
-      @message = "Input not understood"
+      @message = 'Your input could not be understood. Please type either "codebreaker" or "codemaker".'
     end
 
     erb :index

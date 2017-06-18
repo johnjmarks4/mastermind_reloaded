@@ -2,13 +2,30 @@
 <html>
 	<body>
 		<p>
+		<% if @role == "codebreaker" %>
 			<%= @display %>
+		<% elsif defined?(@code) %>
+			<%= @code %>
+		<% end %>
 		</p>
+	</br>
 		<p>
+			<% if @turn == 0 %>
 			<form action = 'submit'>
 				<input type='text' name='role' />
 				<input type='submit' name='submit' />
 			</form>
+			<% elsif @role == "codemaker" && @turn == 1 %>
+			<form action = 'submit'>
+				<input type='text' name='code' />
+				<input type='submit' name='Make Code!' />
+			</form>
+			<% elsif @role == "codebreaker" %>
+			<form action = 'submit'>
+				<input type='text' name='guess' />
+				<input type='submit' name='Make Guess!' />
+			</form>
+			<% end %>
 		</p>
 		<p>
 			<%= @message %>

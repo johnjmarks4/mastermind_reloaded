@@ -1,9 +1,7 @@
 class Game
   attr_accessor :display, :player, :computer
   
-  def initialize(game_name, player_name)
-    @game_name = game_name
-    @player_name = player_name
+  def initialize
     @display = [" ", " ", " ", " "]
   end
   

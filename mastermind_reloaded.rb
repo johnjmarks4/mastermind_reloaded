@@ -10,6 +10,15 @@ end
 
 my_game = Game.new
 
+def computer_make_code
+  @code = []
+  available_colors = ["blue", "green", "orange", "purple", "red", "yellow"]
+  4.times do
+    @code << available_colors[rand(5)]
+  end
+  @code
+end
+
 get '/' do
   @display = " "
   @message = "Would you like to play as codebreaker or codemaker?"
@@ -22,11 +31,10 @@ get '/submit' do
   role = params['role']
   if role == "codemaker"
     session["role"] = "Codemaker"
-    @session = session
     @message = 'Type your code below or type "rules" for a refresher on how to play.'
   elsif role == "codebreaker"
+    session["code"] = computer_make_code
     session["role"] = "Codebreaker"
-    @session = session
     @message = 'Type your guesses below or type "rules" for a refresher on how to play.'
   elsif role == "rules" && session["role"] == "Codemaker"
     @message = File.read("codemaker_rules.txt")
@@ -36,5 +44,6 @@ get '/submit' do
     @message = 'Your input could not be understood. Please type either "codebreaker" or "codemaker".'
   end
 
+  @session = session
   erb :index
 end

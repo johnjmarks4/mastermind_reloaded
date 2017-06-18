@@ -20,6 +20,8 @@ def computer_make_code
 end
 
 get '/' do
+  session['turn'] = 0
+  @session = session
   @display = " "
   @message = "Would you like to play as codebreaker or codemaker?"
   erb :index
@@ -44,6 +46,7 @@ get '/submit' do
     @message = 'Your input could not be understood. Please type either "codebreaker" or "codemaker".'
   end
 
+  session['turn'] += 1
   @session = session
   erb :index
 end

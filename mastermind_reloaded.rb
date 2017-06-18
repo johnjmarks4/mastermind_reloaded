@@ -4,6 +4,10 @@ require_relative 'game'
 require_relative 'codemaker'
 require_relative 'codebreaker'
 
+configure do
+  enable :sessions
+end
+
 puts "Welcome to Mastermind! What is your name?"
 player_name = gets.chomp
 puts "\nHello, #{player_name}! Would you like to play as codebreaker or codemaker?"
@@ -109,8 +113,14 @@ if player.class == Codemaker
   get '/submit' do
     role = params['role']
     if role == "codemaker"
-      @message = File.read("codemaker_rules.txt")
+      session["role"] = "Codemaker"
+      @session = session
     elsif role == "codebreaker"
+      session["role"] = "Codebreaker"
+      @session = session
+    elsif role == "rules" && session["role"] == "Codemaker"
+      @message = File.read("codemaker_rules.txt")
+    elsif role == "rules" && session["role"] == "Codebreaker"
       @message = File.read("codebreaker_rules.txt")
     else
       @message = "Input not understood"

@@ -1,4 +1,5 @@
 require 'sinatra'
+require 'sinatra/reloader' if development?
 require_relative 'game'
 require_relative 'codemaker'
 require_relative 'codebreaker'
@@ -100,9 +101,23 @@ if player.class == Codemaker
       puts "\nThe computer wasn't able to guess your code!"
       puts "You won!"
     end
-  end
-end
 
-get '/' do
-  erb :index
+  get '/' do
+    erb :index
+  end
+
+  get '/submit' do
+    role = params['role']
+    if role == "codemaker"
+      @message = File.read("codemaker_rules.txt")
+    elsif role == "codebreaker"
+      @message = File.read("codebreaker_rules.txt")
+    else
+      @message = "Input not understood"
+    end
+
+    erb :index
+  end
+
+  end
 end

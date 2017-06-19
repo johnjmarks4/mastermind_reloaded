@@ -78,6 +78,11 @@ get '/submit' do
   if session.has_key?('code') && session.has_key?('guess')
     session['display'] = compare_guess_to_code(session['guess'], session['code'])
     @display = session['display']
+    if session['guess'] == session['code'] && session['role'] == "codebreaker"
+      @message = "You correctly guessed the code!"
+    elsif session['guess'] == session['code'] && session['role'] == "codemaker"
+      @message = "The computer correctly guessed the code!"
+    end
   end
 
   session['turn'] += 1

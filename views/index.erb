@@ -2,14 +2,18 @@
 <html>
 	<body>
 		<p>
-		<% if @role == "codebreaker" || defined?(@guess) %>
-			<%= @display %>
-		<% elsif defined?(@code) %>
-			<%= @code %>
-			<%= @role %>
-		<% end %>
+			<% if @role == "codebreaker" || defined?(@guess) %>
+				<%= @display %>
+			<% elsif defined?(@code) %>
+				<%= @code %>
+				<%= @role %>
+			<% end %>
+			<% if defined?(@turn) %>
+				<br><br>
+				Turn: <%= @turn %>
+			<% end %>
 		</p>
-	</br>
+			</br>
 		<p>
 			<% if @turn == 0 %>
 			<form action = 'submit'>

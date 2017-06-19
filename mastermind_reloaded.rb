@@ -137,6 +137,9 @@ get '/submit' do
   elsif @role == "rules" && session['role'] == "codebreaker"
     @message = File.read("codebreaker_rules.txt")
 
+  elsif params.has_key?('start')
+    session['turn'] = -1 #figure out how to make it go back to previous route
+
   else
     @message = 'Your input could not be understood. Please type either "codebreaker" or "codemaker".'
   end
@@ -146,10 +149,10 @@ get '/submit' do
     @display = session['display']
     if session['guess'] == session['code']
       @message = "Code guessed correctly!"
-    elsif session['turn'] > 12
-      @message = "Game over! Turns exceed 14!"
     end
   end
+
+  @message = "Game over! Turns exceed 14!" if session['turn'] > 12
 
   session['turn'] += 1
   @turn = session['turn']

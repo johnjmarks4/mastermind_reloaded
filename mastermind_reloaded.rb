@@ -92,6 +92,7 @@ get '/submit' do
     @role = params['role']
     session['role'] = params['role']
   end
+
   if params.has_key?('guess')
     session['guess'] = params['guess'].split(' ')
     @guess = params['guess'].split(' ')      
@@ -100,28 +101,42 @@ get '/submit' do
     else
       @message = 'Guess again or type "rules" for a refresher on how to play.'
     end
+    if params['guess'] == 'rules'
+      @message = File.read("codebreaker_rules.txt")
+      @guess = "none"
+    end
 
   elsif params.has_key?('code')
     session['code'] = params['code'].split(' ')
     @code = params['code'].split(' ')
-    12.times do
-      session['guess'] = computer_guess(session['display'])
-      session['display'] = compare_guess_to_code(session['guess'], session['code'])
-      session['turn'] += 1
-      break if session['guess'] == session['code']
+    if params['code'] == 'rules'
+      @message = File.read("codemaker_rules.txt")
+      session['guess'] = "none"
+    else
+      12.times do
+        session['guess'] = computer_guess(session['display'])
+        session['display'] = compare_guess_to_code(session['guess'], session['code'])
+        session['turn'] += 1
+        break if session['guess'] == session['code']
+      end
     end
     @guess = session['guess']
+
   elsif @role == "codemaker"
     session["role"] = "codemaker"
     @message = 'Type your code below or type "rules" for a refresher on how to play.'
+
   elsif @role == "codebreaker"
     session['code'] = computer_make_code
     session['role'] = "codebreaker"
     @message = 'Type your guesses below or type "rules" for a refresher on how to play.'
+
   elsif @role == "rules" && session['role'] == "codemaker"
     @message = File.read("codemaker_rules.txt")
+
   elsif @role == "rules" && session['role'] == "codebreaker"
     @message = File.read("codebreaker_rules.txt")
+
   else
     @message = 'Your input could not be understood. Please type either "codebreaker" or "codemaker".'
   end

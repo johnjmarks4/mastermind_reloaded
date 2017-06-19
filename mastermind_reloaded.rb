@@ -19,64 +19,35 @@ def computer_make_code
   @code
 end
 
-def compare_guess_to_code(guess, code)
-  i = 0
-  guess = guess.split(' ')
-  @display = session['display']
-  @display.each_with_index do |_, i|
-    if code[i] == guess[i]
-      @display[i] = "black"
-    elsif code.include?(guess[i])
-      @display[i] = "white"
-    else
-      @display[i] = "      "
-    end
-    i += 1
-  end
-  @display
-end
-
 get '/' do
-  session['display'] = [" ", " ", " ", " "]
   session['turn'] = 0
   @turn = session['turn']
   @session = session
+  @display = " "
   @message = "Would you like to play as codebreaker or codemaker?"
   erb :index
 end
 
 get '/submit' do
-  @display = session['display']
-  if defined?(params['role'])
-    @role = params['role']
-    session['role'] = params['role']
-  end
-  if params.has_key?('guess')
-    session['guess'] = params['guess']
-    @guess = params['guess']
-    session['turn'] == 0 ? @message = "Guess!" : @message = "Guess again!"
-  elsif params.has_key?('code')
-    session['code'] = params['code']
-    @code = params['code']
-    @message = "The computer will now try to guess your code!"
-  elsif @role == "codemaker"
+  @display = my_game.display
+  @role = params['role']
+  if @role == "codemaker"
     session["role"] = "codemaker"
     @message = 'Type your code below or type "rules" for a refresher on how to play.'
   elsif @role == "codebreaker"
-    session['code'] = computer_make_code
-    session['role'] = "codebreaker"
+    session["code"] = computer_make_code
+    session["role"] = "codebreaker"
     @message = 'Type your guesses below or type "rules" for a refresher on how to play.'
-  elsif @role == "rules" && session['role'] == "codemaker"
+  elsif @role == "rules" && session["role"] == "Codemaker"
     @message = File.read("codemaker_rules.txt")
-  elsif @role == "rules" && session['role'] == "codebreaker"
+  elsif @role == "rules" && session["role"] == "Codebreaker"
     @message = File.read("codebreaker_rules.txt")
+  elsif defined?(params['code'])
+    session['code'] = params['code']
+    @code = params['code']
+    @message = "The computer will now try to guess your code!"
   else
     @message = 'Your input could not be understood. Please type either "codebreaker" or "codemaker".'
-  end
-
-  if session.has_key?('code') && session.has_key?('guess') #fix this
-    session['display'] = compare_guess_to_code(session['guess'], session['code'])
-    @display = session['display']
   end
 
   session['turn'] += 1

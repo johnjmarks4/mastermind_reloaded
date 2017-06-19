@@ -21,7 +21,6 @@ end
 
 def compare_guess_to_code(guess, code)
   i = 0
-  guess = guess.split(' ')
   @display = session['display']
   @display.each_with_index do |_, i|
     if code[i] == guess[i]
@@ -53,9 +52,13 @@ get '/submit' do
     session['role'] = params['role']
   end
   if params.has_key?('guess')
-    session['guess'] = params['guess']
-    @guess = params['guess']
-    session['turn'] == 0 ? @message = "Guess!" : @message = "Guess again!"
+    session['guess'] = params['guess'].split(' ')
+    @guess = params['guess'].split(' ')      
+    if session['turn'] == 1
+      @message = 'Type your guesses below or type "rules" for a refresher on how to play.'
+    else
+      @message = 'Guess again or type "rules" for a refresher on how to play.'
+    end
   elsif params.has_key?('code')
     session['code'] = params['code']
     @code = params['code']
@@ -78,10 +81,8 @@ get '/submit' do
   if session.has_key?('code') && session.has_key?('guess')
     session['display'] = compare_guess_to_code(session['guess'], session['code'])
     @display = session['display']
-    if session['guess'] == session['code'] && session['role'] == "codebreaker"
-      @message = "You correctly guessed the code!"
-    elsif session['guess'] == session['code'] && session['role'] == "codemaker"
-      @message = "The computer correctly guessed the code!"
+    if session['guess'] == session['code']
+      @message = "Code guessed correctly!"
     end
   end
 

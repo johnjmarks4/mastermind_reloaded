@@ -4,6 +4,8 @@
 		<p>
 			<% if @role == "codebreaker" || defined?(@guess) %>
 				<%= @display %>
+				<br>
+				<%= @code %> (for testing purposes)
 			<% elsif defined?(@code) %>
 				<%= @code %>
 				<%= @role %>

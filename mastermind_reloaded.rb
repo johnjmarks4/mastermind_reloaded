@@ -18,10 +18,10 @@ def computer_make_code
   end
   @code
 end
-
+=begin
 def compare_guess_to_code(guess, code)
   i = 0
-  while i < display.length
+  while i < @display.length
     if code[i] == guess[i]
       @display[i] = "black"
     elsif code.include?(guess[i])
@@ -30,8 +30,10 @@ def compare_guess_to_code(guess, code)
       @display[i] = "      "
     end
     i += 1
+    session['display'] = @display
   end
 end
+=end
 
 get '/' do
   session['display'] = [" ", " ", " ", " "]

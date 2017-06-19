@@ -2,7 +2,7 @@
 <html>
 	<body>
 		<p>
-		<% if @role == "codebreaker" %>
+		<% if @role == "codebreaker" || defined?(@guess) %>
 			<%= @display %>
 		<% elsif defined?(@code) %>
 			<%= @code %>
@@ -21,7 +21,7 @@
 				<input type='text' name='code' />
 				<input type='submit' name='Make Code!' />
 			</form>
-			<% elsif @role == "codebreaker" %>
+			<% elsif @role == "codebreaker" || defined?(@guess) %>
 			<form action = 'submit'>
 				<input type='text' name='guess' />
 				<input type='submit' name='Make Guess!' />
@@ -30,6 +30,10 @@
 		</p>
 		<p>
 			<%= @message %>
+			<% if defined?(@guess) %>
+				<br>
+				Last guess: <%= @guess %>
+			<% end %>
 		</p>
 	</body>
 </html>

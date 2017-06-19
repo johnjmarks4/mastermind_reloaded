@@ -1,14 +1,10 @@
 require 'sinatra'
 require 'sinatra/reloader' if development?
-require_relative 'game'
-require_relative 'codemaker'
-require_relative 'codebreaker'
+require_relative 'peg'
 
 configure do
   enable :sessions
 end
-
-my_game = Game.new
 
 def computer_make_code
   @code = []
@@ -17,6 +13,45 @@ def computer_make_code
     @code << available_colors[rand(5)]
   end
   @code
+end
+
+def computer_guess(display)
+  available_colors = ["blue", "green", "orange", "purple", "red", "yellow"]
+
+  session['pegs'].each_with_index do |peg, i|
+    if display[i] == "black" #if black use for this peg again
+      peg.found_color = true
+    elsif display[i] == "white"
+      peg.avoid << peg.color #if white use for different peg, but not this one
+      session['saved'] << peg.color
+    elsif display[i] == "      "
+      session['avoid_all'] << peg.color #if "    " don't use for any peg
+    end
+
+    session['avoid_all'].each do |color|
+      peg.avoid << color
+    end
+
+    if peg.found_color == false
+      if peg.color.nil?
+        peg.color = available_colors[rand(6)]
+      elsif peg.avoid.include?(peg.color)
+        colors = available_colors - peg.avoid
+        if session['saved'] == []
+          peg.color = colors[rand(colors.length)]
+        elsif session['saved'].any? { |saved| colors.include?(saved) }
+          peg.color = session['saved'].detect { |saved| colors.include?(saved) }
+          session['saved'].delete(peg.color)
+        else
+          peg.color = colors[rand(colors.length)]
+        end
+      end
+    end
+  end
+
+  guess = []
+  session['pegs'].each { |peg| guess << peg.color }
+  return guess
 end
 
 def compare_guess_to_code(guess, code)
@@ -37,6 +72,12 @@ def compare_guess_to_code(guess, code)
 end
 
 get '/' do
+  session['pegs'] = []
+  session['saved'] = []
+  session['avoid_all'] = []
+  4.times do
+    session['pegs'] << Peg.new #refactor
+  end
   session['display'] = [" ", " ", " ", " "]
   session['turn'] = 0
   @turn = session['turn']
@@ -47,7 +88,7 @@ end
 
 get '/submit' do
   @display = session['display']
-  if defined?(params['role'])
+  if defined?(params['role']) #check this
     @role = params['role']
     session['role'] = params['role']
   end
@@ -59,10 +100,17 @@ get '/submit' do
     else
       @message = 'Guess again or type "rules" for a refresher on how to play.'
     end
+
   elsif params.has_key?('code')
-    session['code'] = params['code']
-    @code = params['code']
-    @message = "The computer will now try to guess your code!"
+    session['code'] = params['code'].split(' ')
+    @code = params['code'].split(' ')
+    12.times do
+      session['guess'] = computer_guess(session['display'])
+      session['display'] = compare_guess_to_code(session['guess'], session['code'])
+      session['turn'] += 1
+      break if session['guess'] == session['code']
+    end
+    @guess = session['guess']
   elsif @role == "codemaker"
     session["role"] = "codemaker"
     @message = 'Type your code below or type "rules" for a refresher on how to play.'
@@ -83,6 +131,8 @@ get '/submit' do
     @display = session['display']
     if session['guess'] == session['code']
       @message = "Code guessed correctly!"
+    elsif session['turn'] > 12
+      @message = "Game over! Turns exceed 14!"
     end
   end
 

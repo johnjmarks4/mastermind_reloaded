@@ -76,11 +76,9 @@ get '/' do
   session['saved'] = []
   session['avoid_all'] = []
   4.times do
-    session['pegs'] << Peg.new #refactor
+    session['pegs'] << Peg.new
   end
   session['display'] = [" ", " ", " ", " "]
-  session['turn'] = 0
-  @turn = session['turn']
   @session = session
   @message = "Would you like to play as codebreaker or codemaker?"
   erb :index
@@ -96,7 +94,7 @@ get '/submit' do
   if params.has_key?('guess')
     session['guess'] = params['guess'].split(' ')
     @guess = params['guess'].split(' ')      
-    if session['turn'] == 1
+    if session['turn'] == 0
       @message = 'Type your guesses below or type "rules" for a refresher on how to play.'
     else
       @message = 'Guess again or type "rules" for a refresher on how to play.'
@@ -123,10 +121,14 @@ get '/submit' do
     @guess = session['guess']
 
   elsif @role == "codemaker"
+    session['turn'] = 0
+    @turn = session['turn']
     session["role"] = "codemaker"
     @message = 'Type your code below or type "rules" for a refresher on how to play.'
 
   elsif @role == "codebreaker"
+    session['turn'] = 0
+    @turn = session['turn']
     session['code'] = computer_make_code
     session['role'] = "codebreaker"
     @message = 'Type your guesses below or type "rules" for a refresher on how to play.'
@@ -138,7 +140,9 @@ get '/submit' do
     @message = File.read("codebreaker_rules.txt")
 
   elsif params.has_key?('start')
-    session['turn'] = -1 #figure out how to make it go back to previous route
+    session.delete('code')
+    session.delete('guess')
+    redirect to('/')
 
   else
     @message = 'Your input could not be understood. Please type either "codebreaker" or "codemaker".'
@@ -152,7 +156,7 @@ get '/submit' do
     end
   end
 
-  @message = "Game over! Turns exceed 14!" if session['turn'] > 12
+  @message = "Game over! Turns exceed 14!" if session['turn'] >= 12
 
   session['turn'] += 1
   @turn = session['turn']

@@ -15,14 +15,14 @@
 				Turn: <%= @turn %>
 			<% end %>
 		</p>
-			</br>
+		</br>
 		<p>
-			<% if @turn == 0 %>
+			<% if not defined?(@turn) %>
 			<form action = 'submit'>
 				<input type='text' name='role' />
 				<input type='submit' name='submit' />
 			</form>
-			<% elsif @turn >= 14 %>
+			<% elsif defined?(@turn) && @turn >= 14 || defined?(@message) && @message == "Code guessed correctly!" %>
 			<form action = 'submit'>
 				<input type = 'submit' name='start' />
 			</form>

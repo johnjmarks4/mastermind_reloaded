@@ -18,21 +18,21 @@
 			<% if not defined?(@turn) %>
 			<form action = 'submit'>
 				<input type='text' name='role' />
-				<input type='submit' name='submit' />
+				<button type='submit' name='submit'>Choose role</button>
 			</form>
 			<% elsif defined?(@turn) && @turn >= 14 || defined?(@message) && @message == "Code guessed correctly!" %>
 			<form action = 'submit'>
-				<input type = 'submit' name='start' />
+				<button type = 'submit' name='start'>Play again</button>
 			</form>
 			<% elsif @role == "codemaker" && @turn == 1 || @code == 'rules' %>
 			<form action = 'submit'>
 				<input type='text' name='code' />
-				<input type='submit' name='Make Code!' />
+				<button type='submit' name='Make Code!'>Make code</button>
 			</form>
 			<% elsif @role == "codebreaker" || @guess == 'none' %>
 			<form action = 'submit'>
 				<input type='text' name='guess' />
-				<input type='submit' name='Make Guess!' />
+				<button type='submit' name='Make Guess!'>Guess</button>
 			</form>
 			<% end %>
 		</p>

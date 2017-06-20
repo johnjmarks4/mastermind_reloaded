@@ -102,6 +102,7 @@ get '/submit' do
     end
     if params['guess'] == 'rules'
       @message = File.read("codebreaker_rules.txt")
+      session['turn'] -= 1
       @guess = "none"
     end
 
@@ -111,6 +112,7 @@ get '/submit' do
     @code = params['code'].split(' ')
     if params['code'] == 'rules'
       @message = File.read("codemaker_rules.txt") #redundancy
+      session['turn'] -= 1
       session['guess'] = "none"
     else
       12.times do
@@ -134,13 +136,6 @@ get '/submit' do
     session['code'] = computer_make_code
     session['role'] = "codebreaker"
     @message = 'Type your guesses below or type "rules" for a refresher on how to play.'
-
-  elsif @role == "rules" && session['role'] == "codemaker"
-    @message = File.read("codemaker_rules.txt")
-
-  elsif @role == "rules" && session['role'] == "codebreaker"
-    @message = File.read("codebreaker_rules.txt")
-    session['code'] = "none"
 
   elsif params.has_key?('start')
     session.delete('code')

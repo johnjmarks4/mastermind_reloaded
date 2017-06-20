@@ -31,7 +31,7 @@
 				<input type='text' name='code' />
 				<input type='submit' name='Make Code!' />
 			</form>
-			<% elsif @role == "codebreaker" || defined?(@guess) %>
+			<% elsif @role == "codebreaker" || defined?(@message) && @message == 'Guess again or type "rules" for a refresher on how to play.' %>
 			<form action = 'submit'>
 				<input type='text' name='guess' />
 				<input type='submit' name='Make Guess!' />

@@ -4,8 +4,6 @@
 		<p>
 			<% if @role == "codebreaker" || defined?(@guess) %>
 				<%= @display %>
-				<br>
-				<%= @code %> (for testing purposes)
 			<% elsif defined?(@code) %>
 				<%= @code %>
 				<%= @role %>
@@ -26,12 +24,12 @@
 			<form action = 'submit'>
 				<input type = 'submit' name='start' />
 			</form>
-			<% elsif @role == "codemaker" && @turn == 1 %>
+			<% elsif @role == "codemaker" && @turn == 1 || @code == 'rules' %>
 			<form action = 'submit'>
 				<input type='text' name='code' />
 				<input type='submit' name='Make Code!' />
 			</form>
-			<% elsif @role == "codebreaker" || defined?(@message) && @message == 'Guess again or type "rules" for a refresher on how to play.' %>
+			<% elsif @role == "codebreaker" || @guess == 'none' %>
 			<form action = 'submit'>
 				<input type='text' name='guess' />
 				<input type='submit' name='Make Guess!' />

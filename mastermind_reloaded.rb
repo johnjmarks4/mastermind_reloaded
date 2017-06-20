@@ -86,12 +86,13 @@ end
 
 get '/submit' do
   @display = session['display']
-  if defined?(params['role']) #check this
+  if params.has_key?('role') #check this
     @role = params['role']
     session['role'] = params['role']
   end
 
   if params.has_key?('guess')
+    @role = session['role']
     session['guess'] = params['guess'].split(' ')
     @guess = params['guess'].split(' ')      
     if session['turn'] == 0
@@ -105,10 +106,11 @@ get '/submit' do
     end
 
   elsif params.has_key?('code')
+    @role = session['role']
     session['code'] = params['code'].split(' ')
     @code = params['code'].split(' ')
     if params['code'] == 'rules'
-      @message = File.read("codemaker_rules.txt")
+      @message = File.read("codemaker_rules.txt") #redundancy
       session['guess'] = "none"
     else
       12.times do
@@ -138,6 +140,7 @@ get '/submit' do
 
   elsif @role == "rules" && session['role'] == "codebreaker"
     @message = File.read("codebreaker_rules.txt")
+    session['code'] = "none"
 
   elsif params.has_key?('start')
     session.delete('code')

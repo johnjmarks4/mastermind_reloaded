@@ -100,7 +100,7 @@ get '/submit' do
       @guess.gsub!("  ", " ")
       @guess.gsub!(", ", " ")
       @guess.gsub!(",", " ")
-      @guess.split(" ")
+      @guess = @guess.split(" ")
       session['guess'] = @guess
     end
     @guess = session['guess']

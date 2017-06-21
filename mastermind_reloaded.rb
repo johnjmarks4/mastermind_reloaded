@@ -71,6 +71,14 @@ def compare_guess_to_code(guess, code)
   @display
 end
 
+def format(input)
+  input.gsub!("  ", " ")
+  input.gsub!("  ", " ")
+  input.gsub!(", ", " ")
+  input.gsub!(",", " ")
+  guess = input.split(" ")
+end
+
 get '/' do
   session['pegs'] = []
   session['saved'] = []
@@ -87,15 +95,15 @@ end
 get '/submit' do
   session['available_colors'] = ["blue", "green", "orange", "purple", "red", "yellow"]
   @display = session['display']
-  if params.has_key?('role') #check this
+  if params.has_key?('role')
     @role = params['role']
     session['role'] = params['role']
   end
 
   if params.has_key?('guess')
     @role = session['role']
-    session['guess'] = params['guess'].split(' ')
-    @guess = params['guess'].split(' ')      
+    session['guess'] = format(params['guess'])
+    @guess = session['guess']      
     if session['turn'] == 0
       @message = 'Type your guesses below or type "rules" for a refresher on how to play.'
     else

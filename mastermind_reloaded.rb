@@ -71,14 +71,6 @@ def compare_guess_to_code(guess, code)
   @display
 end
 
-def format(guess)
-  guess.gsub!("  ", " ")
-  guess.gsub!("  ", " ")
-  guess.gsub!(", ", " ")
-  guess.gsub!(",", " ")
-  guess.split(" ")
-end
-
 get '/' do
   session['pegs'] = []
   session['saved'] = []
@@ -103,8 +95,13 @@ get '/submit' do
   if params.has_key?('guess')
     @role = session['role']
     unless params['guess'] == 'rules'
-      session['guess'] = params['guess']
-      session['guess'] = format(session['guess'])
+      @guess = params['guess']
+      @guess.gsub!("  ", " ")
+      @guess.gsub!("  ", " ")
+      @guess.gsub!(", ", " ")
+      @guess.gsub!(",", " ")
+      @guess = @guess.split(" ")
+      session['guess'] = @guess
     end
     @guess = session['guess']
     if session['turn'] == 0

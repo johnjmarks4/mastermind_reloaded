@@ -85,6 +85,7 @@ get '/' do
 end
 
 get '/submit' do
+  session['available_colors'] = ["blue", "green", "orange", "purple", "red", "yellow"]
   @display = session['display']
   if params.has_key?('role') #check this
     @role = params['role']
@@ -104,6 +105,10 @@ get '/submit' do
       @message = File.read("codebreaker_rules.txt")
       session['turn'] -= 1
       @guess = "none"
+    elsif params['guess'].split(" ").all? { |guess| session['available_colors'].include?(guess) } == false
+      @role = session['role']
+      session['turn'] -= 1
+      @message = 'Your input could not be understood. Type your guesses below or type "rules" for a refresher on how to play.'
     end
 
   elsif params.has_key?('code')
@@ -111,9 +116,13 @@ get '/submit' do
     session['code'] = params['code'].split(' ')
     @code = params['code'].split(' ')
     if params['code'] == 'rules'
-      @message = File.read("codemaker_rules.txt") #redundancy
+      @message = File.read("codemaker_rules.txt")
       session['turn'] -= 1
       session['guess'] = "none"
+    elsif params['code'].split(" ").all? { |color| session['available_colors'].include?(color) } == false
+      @role = session['role']
+      session['turn'] -= 1
+      @message = 'Your input could not be understood. Type your code below or type "rules" for a refresher on how to play.'
     else
       12.times do
         session['guess'] = computer_guess(session['display'])
@@ -143,6 +152,7 @@ get '/submit' do
     redirect to('/')
 
   else
+    @role = session['role']
     @message = 'Your input could not be understood. Please type either "codebreaker" or "codemaker".'
   end
 

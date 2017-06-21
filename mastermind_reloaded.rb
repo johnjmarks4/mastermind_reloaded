@@ -102,7 +102,9 @@ get '/submit' do
 
   if params.has_key?('guess')
     @role = session['role']
-    session['guess'] = format(params['guess']) unless params['guess'] == 'rules'
+    unless params['guess'] == 'rules'
+      session['guess'] = format(params['guess'])
+    end
     @guess = session['guess']      
     if session['turn'] == 0
       @message = 'Type your guesses below or type "rules" for a refresher on how to play.'

@@ -102,7 +102,7 @@ get '/submit' do
 
   if params.has_key?('guess')
     @role = session['role']
-    session['guess'] = format(params['guess'])
+    session['guess'] = format(params['guess']) unless params['guess'] == 'rules'
     @guess = session['guess']      
     if session['turn'] == 0
       @message = 'Type your guesses below or type "rules" for a refresher on how to play.'
@@ -112,7 +112,7 @@ get '/submit' do
     if params['guess'] == 'rules'
       @message = File.read("codebreaker_rules.txt")
       session['turn'] -= 1
-      @guess = "none"
+      @guess = session['guess']
     elsif params['guess'].split(" ").all? { |guess| session['available_colors'].include?(guess) } == false
       @role = session['role']
       session['turn'] -= 1

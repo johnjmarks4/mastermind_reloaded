@@ -76,7 +76,7 @@ def format(input)
   input.gsub!("  ", " ")
   input.gsub!(", ", " ")
   input.gsub!(",", " ")
-  guess = input.split(" ")
+  input.split(" ")
 end
 
 get '/' do
@@ -105,7 +105,7 @@ get '/submit' do
     unless params['guess'] == 'rules'
       session['guess'] = format(params['guess'])
     end
-    @guess = session['guess']      
+    @guess = format(params['guess'])
     if session['turn'] == 0
       @message = 'Type your guesses below or type "rules" for a refresher on how to play.'
     else
